@@ -1,0 +1,25 @@
+@startuml
+actor Admin
+boundary "Product Form" as UI
+control "ProductRepository" as Repo
+database "Internal Database" as DB
+
+Admin -> UI : Enter Product Details (Name, Price, Stock)
+Admin -> UI : Click "Add" or "Update"
+
+UI -> Repo : AddProduct(product) / UpdateProduct(product)
+activate Repo
+Repo -> DB : Execute SQL Insert/Update
+Repo --> UI : Comparison Result
+deactivate Repo
+
+UI -> Repo : GetAllProducts()
+activate Repo
+Repo -> DB : Select * From Products
+DB --> Repo : Return List
+Repo --> UI : Return Product List
+deactivate Repo
+
+UI -> UI : Refresh DataGridView
+UI --> Admin : Show Success Message
+@enduml

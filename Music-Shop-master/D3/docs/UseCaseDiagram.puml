@@ -1,0 +1,28 @@
+@startuml
+left to right direction
+actor "Store Owner (Admin)" as Admin
+actor "Sales Staff (Cashier)" as Cashier
+
+rectangle "Shop Management System" {
+  usecase "Manage Products (Add/Edit/Delete)" as UC1
+  usecase "Manage Inventory (Stock In/Out)" as UC2
+  usecase "View Reports (Sales/Stock)" as UC3
+  usecase "Process Sale (POS)" as UC4
+  usecase "Generate Receipt" as UC5
+  usecase "Search Products" as UC6
+  usecase "Login" as UC7
+}
+
+Admin --> UC1
+Admin --> UC2
+Admin --> UC3
+Admin --> UC7
+
+Cashier --> UC4
+Cashier --> UC6
+Cashier --> UC7
+
+UC4 ..> UC5 : <<include>>
+UC4 ..> UC2 : <<include>> (Update Stock)
+UC1 ..> UC6 : <<extend>>
+@enduml

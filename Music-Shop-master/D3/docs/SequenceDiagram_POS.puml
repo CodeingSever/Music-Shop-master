@@ -1,0 +1,29 @@
+@startuml
+actor Cashier
+boundary "POS Form" as UI
+control "TransactionRepository" as Repo
+control "ReceiptService" as Receipt
+database "Internal Database" as DB
+
+Cashier -> UI : Add Item to Cart (Product, Qty)
+UI -> UI : Check Stock Availability
+UI -> UI : Update Cart Grid & Total
+
+Cashier -> UI : Click Checkout
+UI -> Repo : CreateTransaction(Transaction, Items)
+activate Repo
+Repo -> DB : Insert Transaction Record
+Repo -> DB : Insert Transaction Items
+Repo -> DB : Update Product Stock (Deduct)
+Repo --> UI : Return Transaction ID
+deactivate Repo
+
+UI -> Receipt : GenerateReceipt(Transaction, Items)
+activate Receipt
+Receipt -> Receipt : Create PDF Document
+Receipt --> UI : Return File Path
+deactivate Receipt
+
+UI -> UI : Open PDF Receipt
+UI --> Cashier : Show Success Message
+@enduml
